@@ -1,8 +1,13 @@
 #include <stdio.h>
 #include <errno.h>
 
-
-filename = "/dev/flux_baby_2";
+int hint_count=0;
+char hints[] = {"This time some exploitation has to take place", 
+	"The flag file is not readable by your current user", 
+	"You will need to become root to solve the challenge", 
+	"There may be different ways, but we do not necessarily need to modify a $rip",
+	"We might want to find something to override. What is it and how can we find it?",
+	"Kernel header files may give you some hints about how to identify what we are looking for"};
 
 void menu(){
 	return printf("----- Menu -----\n"
@@ -75,6 +80,15 @@ void do_readfile(){
 		}
 	}
 }
+
+__int64 do_hint(){
+	__int64 result;
+	++hint_count;
+	printf("Okay, here is your next hint:\n'%s'\n", hints[hint_count]);
+	result=hint_count%6;
+	return result;
+}
+
 
 int main(int argc, char* argv[], char* env[]){
 	int fd;
