@@ -1,0 +1,1 @@
+export LD_LIBRARY_PATH=/home/ubuntu/CTF/hackctf/yes_or_no:$LD_LIBRARY_PATH
